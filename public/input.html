@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Enter Words!</title>
+
+        <script>
+            function randomWord(grammer){
+                let words;
+                switch(grammer){
+                    case "noun":
+                        words = ["snake", "fool", 'car', 'mountain'];
+                        break;
+                    case "verb":
+                        words = ['jump', 'eat', 'build', 'skydive'];
+                        break;
+                    case "adjective":
+                        words = ['stinky', 'giant', 'soft', 'tasty'];
+                        break;
+                    case "plural":
+                        words = ['snakes', 'fools', 'cars', 'mountains'];
+                        break;
+                    default:
+                        words = ['ERROR: Unknown class: ' + grammer];
+                }
+
+                return words[Math.floor(Math.random()*words.length)];
+            }
+            // The browser can pass the event to the event handler
+            function randomButton(event) {
+                event.target.previousElementSibling.value = randomWord(event.target.previousElementSibling.className);
+            };
+    
+            window.onload = function () {
+                let buttons = document.getElementsByClassName('random');
+
+                for(let i of buttons){
+                    i.addEventListener("click", randomButton);
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <form action="http://localhost:3444/output" method="get">
+            <label>Plural Noun:</label>
+            <input type="text" name="plural" size="30" maxlength="100" required="required" class="plural">
+            <button class="random" type="button">Random</button>
+            <br>
+            <label>Verb:</label>
+            <input type="text" name="verb" size="30" maxlength="100" required="required" class="verb">
+            <button class="random" type="button">Random</button>
+            <br>
+            <label>Adjective:</label>
+            <input type="text" name="adjective" size="30" maxlength="100" required="required" class="adjective">
+            <button class="random" type="button">Random</button>
+            <br>
+            <label>Noun:</label>
+            <input type="text" name="noun1" size="30" maxlength="100" required="required" class="noun">
+            <button class="random" type="button">Random</button>
+            <br>
+            <label>Noun (body part):</label>
+            <input type="text" name="noun2" size="30" maxlength="100" required="required" class="noun">
+            <button class="random" type="button">Random</button>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+</html>
