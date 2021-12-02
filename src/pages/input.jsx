@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from 'react-router-dom';
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 function sendRequest(word, target){
     const request = new XMLHttpRequest();
@@ -16,53 +14,36 @@ function sendRequest(word, target){
     return request;
 }
 
-function randomWord(grammer){
-    let words;
-    switch(grammer){
-        case "noun":
-            words = ["snake", "fool", 'car', 'mountain'];
-            break;
-        case "verb":
-            words = ['jump', 'eat', 'build', 'skydive'];
-            break;
-        case "adjective":
-        case "adj":
-            words = ['stinky', 'giant', 'soft', 'tasty'];
-            break;
-        case "plural":
-            words = ['snakes', 'fools', 'cars', 'mountains'];
-            break;
-        default:
-            words = ['ERROR: Unknown class: ' + grammer];
-    }
-
-    return words[Math.floor(Math.random()*words.length)];
-}
-
 function randomButton(event) {
-    event.target.previousElementSibling.value = randomWord(event.target.previousElementSibling.className);
     event.target.previousElementSibling.value = "Getting random word...";
     sendRequest(event.target.previousElementSibling.className, event.target);
 };
 
-function createInput(word){
-    return(
-        <>
-            <label>{word.d}:</label>
-            <input type="text" name={word.d} size="30" maxlength="100" required="required" class={word.t}></input>
-            <button class="random" type="button" onClick={randomButton}>Random</button>
-            <br></br>
-        </>
-    )
+function CreateInput({word, names, i, index}){
+    names[i] = word.d;
+    let inputName = word.d;
+    if(i===0){inputName = index;}
+    
+    for(let j=0; j<i; j++){
+        if(names[j] === word.d){return null;}
+    }
+    
+    return(<>
+        <label key={word.d}>{word.d}:</label>
+        <input type="text" name={inputName} size="30" required="required" className={word.t}/>
+        <button className="random" type="button" onClick={randomButton}>Random</button>
+        <br/>
+    </>)
 }
 
-function Input({template}){
+function Input({template, index}){
+    let names = [];
     return (
         <>
-            <p>Enter words in the boxes, then click Submit to see your story! The random buttons will fill in the
-             box for you. Don't like the random word? Click it again for another!</p>
+            <p>Enter words in the boxes, then click Submit to see your story! The random buttons will
+                 fill in the box for you. Don't like the random word? Click it again for another!</p>
             <form action="/Output" method="get">
-                {template.words.map((word, i) => createInput(word))}
+                {template.words.map((word, i) => <CreateInput word={word} names={names} i={i} index={index}/>)}
                 <button type="submit">Submit</button>
             </form>
         </>
